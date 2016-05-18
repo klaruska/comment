@@ -1,0 +1,82 @@
+<div>
+
+    {% for comment in list_coment %}
+        <div>
+            <table class="comments">
+                {% with comment.id|stringformat:"s" as comment_id %}
+                <tr>
+                    {% with "span_quality_id_"|add:comment_id as span_quality_id %}
+                    <td rowspan="2" class="top first">
+                        <i class='fa fa-user'></i><br><br>
+                        <span {% if comment.quality > 0 %} class="quality green" {% elif comment.quality < 0 %} class="quality red" {% else %} class="quality blue" {% endif %}>
+                            <span id="{{ span_quality_id }}">{{ comment.quality }}</span>
+                        </span>
+                    </td>
+                    <td>
+                        <b class="blue author">{{ comment.author }}</b>
+                        <i class="date" title="{{ comment.create_date|date:"d.m.Y" }}, {{ comment.create_date|time:"H:i" }}">{{ comment.create_date|timeago }}</i>
+                        <span class="right">
+                                {% with "span_like_id_"|add:comment_id as span_like_id %}
+                                {% with "span_dislike_id_"|add:comment_id as span_dislike_id %}
+                                {% with comment.quality|stringformat:"s" as quality %}
+                                {% with comment.like|stringformat:"s" as likes %}
+                                {% with comment.dislike|stringformat:"s" as dislikes %}
+                                {% with "like_button_id_"|add:comment_id as like_button_id %}
+                                {% with "dislike_button_id_"|add:comment_id as dislike_button_id %}
+                                    {% load ajax %}
+                                    {% url 'comment_like' comment_id=comment.id as page_url_like %}
+                                    {% url 'comment_dislike' comment_id=comment.id as page_url_dislike %}
+                                    {% like_loader page_url_like page_url_dislike span_quality_id=span_quality_id span_like_id=span_like_id span_dislike_id=span_dislike_id quality=quality likes=likes dislikes=dislikes like_button_id=like_button_id dislike_button_id=dislike_button_id as likeloader %}
+                                    {{ likeloader.span_like_id|safe }}
+                                    {{ likeloader.span_dislike_id|safe }}
+                                    <script>{{ likeloader.like_script|safe }}</script>
+                                    <script>{{ likeloader.dislike_script|safe }}</script>
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                        </span>
+                    </td>
+                    {% endwith %}
+                </tr>
+                {% endwith %}
+                <tr>
+                    <td>
+                        <p>
+                            {{ comment.content }}
+                        </p>
+
+                        {% if comment.children.exists %}
+                            <div class="sub">
+                                {% with comment.id|stringformat:"s" as comment_id %}
+                                {% with "pagediv_id_"|add:comment_id as pagediv_id %}
+                                {% with "loadbutton_id_"|add:comment_id as loadbutton_id %}
+                                {% with "pagination_id_"|add:comment_id as pagination_id %}
+                                    {% load ajax %}
+                                    {% url "comment_children_list" post_id=comment.post.id comment_id=comment.id as sub_page_url %}
+                                    {% get_pageloader sub_page_url pagediv_id=pagediv_id loadbutton_id=loadbutton_id pagination_id=pagination_id as pageloader %}
+
+                                    {{ pageloader.pagediv|safe }}
+                                    {{ pageloader.loadbutton|safe }}
+                                    {{ pageloader.pagination|safe }}
+
+                                    <script>
+                                        {{ pageloader.button_script|safe }}
+                                    </script>
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+
+                    </td>
+                </tr>
+            <hr>
+            </table>
+        </div>
+    {% endfor %}
+</div>

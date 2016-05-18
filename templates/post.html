@@ -1,0 +1,82 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}Super blog{% endblock %}
+    </title>
+    <link rel="stylesheet" type="text/css" href="{% static 'default.css' %}">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
+    {#    <link rel="stylesheet" href="{% static 'Font-Awesome-4.1.0/css/font-awesome.min.css' %}">#}
+    <link rel="shortcut icon" href="{% static 'logo_icon.ico' %}">
+    <link rel="icon" type="image/png" href="{% static 'logo_icon.ico' %}">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="{% static 'ajax.js' %}"></script>
+    {#    <script type="text/javascript" src="{% static 'javascript/default.js' %}"></script>#}
+    {#    <script src="{% static 'javascript/jscolor.js' %}"></script>#}
+    {#    <script type="text/javascript" src="{% static 'javascript/difflib-browser.js' %}"></script>#}
+</head>
+<body>
+<div class="page">
+    <header class="clearfix">
+        <div>
+            <h1>
+                <img class="image" src="{% static 'logo.png' %}">
+                <span class="top">Super blog</span>
+            </h1>
+        </div>
+
+    </header>
+
+    <div class="content">
+
+        <h2 class="title">{{ post.title }}</h2>
+        <span class="date">Created
+            <i>{{ post.create_date|date:"d.m.Y" }}, {{ post.create_date|time:"H:i" }}</i>
+            by <b><i class="author">{{ post.author }}</i></b>
+        </span>
+
+        <p>{{ post.content }}</p>
+
+        <h3>Komentáre</h3>
+
+        {% load ajax %}
+        {% url "comment_list" post_id=post.id as page_url %}
+        {% get_pageloader page_url as pageloader %}
+
+        {{ pageloader.pagediv|safe }}
+        {{ pageloader.loadbutton|safe }}
+        {{ pageloader.pagination|safe }}
+
+        <script>
+            {{ pageloader.button_script|safe }}
+        </script>
+
+    </div>
+
+    <div class="sidebar">
+        <table class="nav">
+            <tr>
+                <th>
+                    <h3 class="h3">Najlepšie články</h3>
+                </th>
+            </tr>
+            {% for post in posts %}
+                <tr>
+                    <td class="title">
+                        <a href="{% url 'post' post_id=post.id %}">{{ post.title }}</a><br>
+                            <span class="date">
+                                <i title="{{ post.create_date|date:"d.m.Y" }}, {{ post.create_date|time:"H:i" }}">{{ post.create_date|timeago }}</i>
+                            </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>
