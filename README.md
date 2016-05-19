@@ -14,7 +14,7 @@
 - `ajax.js` tiež obsahuje funkciu **like** a **dislike**, ktoré zabezpečujú pripočítanie, resp. odpočítanie hlasu ku komentáru
 - pre zobrazenie ikony používateľa a tlačidiel plus a mínus je využívaný Font Awesome Icons 
 - pod ikonou **user** sa nachádza hodnota, ktorá označuje kvalitu komentára *(kvalita = pocet_kladnych_hodnoteni - pocet_zapornych_hodnoteni)*
-- pre zobrazenie dátumu a času vytvorenia (v zozname článkov a pri komentároch) vo formáte *xx ago* bol vytvorený filter `timeago`, ktorý sa nachádza v *commenting/templatetags/custom_tags.py*
-- po prejdení myšou na takto formátovaný dátum a čas vytvorenia články, resp. komentára je zobrazený dátym vo formáte **dd.mm.yyyy** a čas vo formáte **hh:mm**
 - komentáre sú zoradené podľa kvality, počnúc najvyššou
 - komentáre je možné hodnotiť, kliknutím na ikonu **+**, resp. **-**
+- pre zobrazenie dátumu a času vytvorenia (v zozname článkov a pri komentároch) vo formáte *xx ago* bol vytvorený filter `timeago`, ktorý sa nachádza v *commenting/templatetags/custom_tags.py*
+- po prejdení myšou na takto formátovaný dátum a čas vytvorenia článku, resp. komentára je zobrazený dátym vo formáte **dd.mm.yyyy** a čas vo formáte **hh:mm**
